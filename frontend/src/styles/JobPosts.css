@@ -1,0 +1,129 @@
+/* JobPosts.css */
+
+/* Container for the entire job posts section */
+.job-posts-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+  
+  /* Styling for the form to create a new job post */
+  .job-post-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .job-post-form h2 {
+    margin-bottom: 20px;
+  }
+  
+  .job-post-form div {
+    margin-bottom: 15px;
+  }
+  
+  .job-post-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .job-post-form input[type="text"],
+  .job-post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .job-post-form textarea {
+    resize: vertical;
+  }
+  
+  .job-post-form button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .job-post-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Styling for the list of job posts */
+  .job-posts-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .job-post-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .job-post-card h3 {
+    margin-top: 0;
+  }
+  
+  .job-post-card p {
+    margin: 10px 0;
+  }
+  
+  .job-post-card .job-post-details {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .job-post-card button {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .job-post-card button:hover {
+    background-color: #218838;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .job-post-form {
+      padding: 15px;
+    }
+  
+    .job-post-card {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .job-post-form input[type="text"],
+    .job-post-form textarea {
+      font-size: 14px;
+    }
+  
+    .job-post-card h3 {
+      font-size: 18px;
+    }
+  
+    .job-post-card p {
+      font-size: 14px;
+    }
+  
+    .job-post-card button {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+  }
+  
