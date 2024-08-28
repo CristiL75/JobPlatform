@@ -55,22 +55,22 @@ class JobPostListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
 class ShowInterestView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Ensure the view requires authentication
 
     def post(self, request, pk):
         user = request.user
         try:
             job_post = JobPost.objects.get(pk=pk)
-            # Ensure that a user can only show interest once
+            # Handle the interest logic here
             interest, created = UserInterest.objects.get_or_create(user=user, job_post=job_post)
             if created:
-                return Response({'message': 'Interest recorded'}, status=status.HTTP_200_OK)
+                return Response({'message': 'Interest recorded'}, status=status.HTTP_201_CREATED)
             else:
                 return Response({'message': 'Already showed interest'}, status=status.HTTP_400_BAD_REQUEST)
         except JobPost.DoesNotExist:
             return Response({'error': 'Job post not found'}, status=status.HTTP_404_NOT_FOUND)
-
 class ListInterestedUsers(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -85,7 +85,6 @@ class ListInterestedUsers(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except JobPost.DoesNotExist:
             return Response({'error': 'Job post not found'}, status=status.HTTP_404_NOT_FOUND)
-
 
 class CurrentUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -110,3 +109,12 @@ class JobPostDetailView(generics.RetrieveDestroyAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Http404:
             return Response({'error': 'Job post not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        
+class ListInterestsView(generics.ListAPIView):
+    serializer_class = UserInterestSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserInterest.objects.filter(user=user)
