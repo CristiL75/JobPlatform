@@ -16,6 +16,10 @@ from .models import JobPost, UserInterest
 from .serializers import UserInterestSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .serializers import JobSeekerPostSerializer
+from rest_framework import viewsets
+from .models import JobSeekerPost
+from .serializers import JobSeekerPostSerializer
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserCreate(generics.CreateAPIView):
@@ -118,3 +122,55 @@ class ListInterestsView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return UserInterest.objects.filter(user=user)
+    
+
+class JobSeekerPostViewSet(viewsets.ModelViewSet):
+    queryset = JobSeekerPost.objects.all()
+    serializer_class = JobSeekerPostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        username = self.request.data.get('created_by')
+        if username:
+            try:
+                user = User.objects.get(username=username)
+                serializer.save(created_by=user)
+            except User.DoesNotExist:
+                return Response({'error': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        post = self.get_object()
+        # Get the username from request headers
+        request_username = request.headers.get('Username')
+        if post.created_by.username != request_username:
+            return Response({'error': 'You are not allowed to edit this post.'}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        post = self.get_object()
+        # Get the username from request headers
+        request_username = request.headers.get('Username')
+        if post.created_by.username != request_username:
+            return Response({'error': 'You are not allowed to delete this post.'}, status=status.HTTP_403_FORBIDDEN)
+        return super().destroy(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(f"Serializer errors: {serializer.errors}")  # Debug output
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class JobSeekerPostListCreateView(generics.ListCreateAPIView):
+    queryset = JobSeekerPost.objects.all()
+    serializer_class = JobSeekerPostSerializer
+    
+class JobSeekerPostDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = JobSeekerPost.objects.all()
+    serializer_class = JobSeekerPostSerializer

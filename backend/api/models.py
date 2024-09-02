@@ -41,4 +41,31 @@ class UserInterest(models.Model):
     job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.interested_user.username} is interested in {self.job_post.title}"
+    
+    
+    
 
+class JobSeekerPost(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    skills = models.CharField(max_length=500)  # Consider ManyToManyField for multiple skills
+    experience_level = models.CharField(max_length=50, choices=[
+        ('Junior', 'Junior'),
+        ('Mid-Level', 'Mid-Level'),
+        ('Senior', 'Senior'),
+    ])
+    preferred_location = models.CharField(max_length=100)
+    employment_type = models.CharField(max_length=50, choices=[
+        ('Full-Time', 'Full-Time'),
+        ('Part-Time', 'Part-Time'),
+        ('Freelance', 'Freelance'),
+        ('Internship', 'Internship'),
+        ('Remote', 'Remote'),
+    ])
+    industry = models.CharField(max_length=100)  # Consider choices if predefined
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)  
+
+    def __str__(self):
+        return self.title

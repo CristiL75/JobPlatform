@@ -1,0 +1,58 @@
+.job-seeker-posts {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.post-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  width: 300px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.post-card.expanded {
+  background-color: #f9f9f9;
+}
+
+.post-details {
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+}
+
+.toggle-form-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.toggle-form-button:hover {
+  background-color: #0056b3;
+}

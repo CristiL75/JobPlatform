@@ -1,5 +1,3 @@
-// src/components/Home.jsx
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +24,11 @@ function Home() {
     navigate("/job-posts");
   };
 
+  const handleJobSeekerPostsClick = () => {
+    // Redirect user to the job seeker posts page
+    navigate("/job-seeker-posts");
+  };
+
   return (
     <div>
       {/* Navbar */}
@@ -38,6 +41,10 @@ function Home() {
           {/* Link to Job Posts page */}
           <span style={navLinkStyle} onClick={handleJobPostsClick}>
             Joburi
+          </span>
+          {/* Link to Job Seeker Posts page */}
+          <span style={navLinkStyle} onClick={handleJobSeekerPostsClick}>
+          job listings
           </span>
         </div>
       </nav>
