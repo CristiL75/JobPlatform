@@ -165,6 +165,7 @@ CORS_ALLOW_HEADERS = '*'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+load_dotenv()  # Ensure this is called before accessing environment variables
 
 
-
+HF_TOKEN = os.getenv('HUGGINGFACE_HUB_TOKEN')
