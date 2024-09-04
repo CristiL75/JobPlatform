@@ -28,3 +28,8 @@ dist-ssr
 
 node_modules/
 dist/
+# .gitignore
+.vs/
+env/Lib/site-packages/torch/lib/torch_cpu.dll
+env/Lib/site-packages/torch/lib/dnnl.lib
+

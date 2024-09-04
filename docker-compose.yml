@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: ./backend  # Schimbă cu calea către directorul Django
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app  # Montează codul sursă pentru dezvoltare
+    environment:
+      - DEBUG=True
+    depends_on:
+      - db
+
+  react:
+    build:
+      context: ./frontend  # Schimbă cu calea către directorul React
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app  # Montează codul sursă pentru dezvoltare
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Necesare pentru schimbări în Docker pe unele platforme
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+
+volumes:
+  postgres_data:

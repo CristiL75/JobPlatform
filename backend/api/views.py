@@ -24,10 +24,8 @@ from django.http import JsonResponse
 import json 
 import requests
 import logging
-import openai
 from django.conf import settings
 from django.views import View
-import time
 from .models import Message
 from django.shortcuts import render
 

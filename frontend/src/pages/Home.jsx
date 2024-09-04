@@ -5,7 +5,7 @@ import Chatbot from './Chatbot';
 function Home() {
   const [username, setUsername] = useState(""); 
   const navigate = useNavigate(); 
-  console.log("OpenAI API Key:", import.meta.env.OPENAI_API_KEY);
+
 
 
   useEffect(() => {
