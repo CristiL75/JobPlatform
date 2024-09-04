@@ -5,6 +5,7 @@ from .views import UserCreate, UserProfileView
 from .views import JobPostListCreateView
 from .views import ShowInterestView, ListInterestedUsers
 from .views import CurrentUserView, JobPostDetailView, ShowInterestView, ListInterestsView, JobPostDetailView, JobSeekerPostListCreateView, JobSeekerPostDetailView
+from .views import ChatbotView
 
 urlpatterns = [
     path('user/create/', UserCreate.as_view(), name='user-create'),
@@ -16,4 +17,6 @@ urlpatterns = [
     path('job-posts/<int:pk>/', JobPostDetailView.as_view(), name='job-post-detail'),
     path('job-seeker-posts/', JobSeekerPostListCreateView.as_view(), name='job-seeker-post-list-create'),
     path('job-seeker-posts/<int:pk>/', JobSeekerPostDetailView.as_view(), name='job-seeker-post-detail'),
+    path('chatbot/', ChatbotView.as_view(), name='chatbot'),
+
 ]

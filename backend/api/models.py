@@ -6,6 +6,8 @@ from django.conf import settings
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cv_pdf = models.FileField(upload_to='cvs/', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=100, blank=True, null=True)
     education = models.TextField(blank=True, null=True)
     experience = models.TextField(blank=True, null=True)
@@ -69,3 +71,13 @@ class JobSeekerPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+
+class Message(models.Model):
+    user_message = models.TextField()
+    bot_response = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"User: {self.user_message} | Bot: {self.bot_response}"

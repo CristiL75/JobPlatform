@@ -20,6 +20,19 @@ from .serializers import JobSeekerPostSerializer
 from rest_framework import viewsets
 from .models import JobSeekerPost
 from .serializers import JobSeekerPostSerializer
+from django.http import JsonResponse
+import json 
+import requests
+import logging
+import openai
+from django.conf import settings
+from django.views import View
+import time
+from .models import Message
+from django.shortcuts import render
+
+logger = logging.getLogger(__name__)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserCreate(generics.CreateAPIView):
@@ -40,16 +53,24 @@ class UserProfileView(APIView):
         
         serializer = UserProfileSerializer(profile)
         return Response(serializer.data)
+    
+    def post(self, request, username=None, format=None):
+        if username:
+            profile = get_object_or_404(UserProfile, user__username=username)
+        else:
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
 
-    def post(self, request, format=None):
-        # Get current user's profile
-        profile, created = UserProfile.objects.get_or_create(user=request.user)
         serializer = UserProfileSerializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
+    
+
+    
+
 
 class JobPostListCreateView(generics.ListCreateAPIView):
     queryset = JobPost.objects.all()
@@ -174,3 +195,133 @@ class JobSeekerPostListCreateView(generics.ListCreateAPIView):
 class JobSeekerPostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = JobSeekerPost.objects.all()
     serializer_class = JobSeekerPostSerializer
+    
+
+logger = logging.getLogger(__name__)
+
+
+# Set up the API with the token
+
+
+import pdfplumber
+
+def extract_text_from_pdf(pdf_path):
+    text = ""
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
+
+
+
+def get_bot_response(user_message):
+    user_message = user_message.lower()
+
+    # ** Introduction **
+    greetings = ["hello", "hi", "hey", "greetings", "what's up", "yo", "howdy", "help", "start"]
+    if any(word in user_message for word in greetings):
+        return ("Hello! I'm your job platform assistant. I'm here to help you with job postings, job seeker posts, user profiles, and more. "
+                "You can ask me about job openings, job details, job seeker posts, or how to manage your account. How can I assist you today?")
+
+    # ** Job Posts **
+    if "job openings" in user_message or "available jobs" in user_message:
+        jobs = JobPost.objects.all().order_by('-created_at')[:5]
+        if jobs:
+            job_list = ', '.join([job.title for job in jobs])
+            return f"Here are some of the latest job openings: {job_list}. For more details, please visit our job board."
+        return "There are currently no job openings available."
+
+    if "job details" in user_message:
+        job_title = user_message.replace("job details", "").strip()
+        job = JobPost.objects.filter(title__icontains=job_title).first()
+        if job:
+            return (f"Job Title: {job.title}\nDescription: {job.description}\nLocation: {job.location}\n"
+                    f"Company: {job.company}\nSalary: {job.salary}\nEmployment Type: {job.employment_type}\n"
+                    f"Domain: {job.domain}\nExperience Level: {job.experience_level}\nJob Type: {job.job_type}\n"
+                    f"Languages: {job.languages}\nSkills: {job.skills}")
+        return "Sorry, I couldn't find any job details matching that description."
+
+    if "search job" in user_message:
+        keywords = user_message.replace("search job", "").strip()
+        jobs = JobPost.objects.filter(title__icontains=keywords)[:5]
+        if jobs:
+            job_list = ', '.join([job.title for job in jobs])
+            return f"Here are some jobs matching your search: {job_list}."
+        return "No jobs found matching your search criteria."
+
+    # ** Job Seeker Posts **
+    if "job seeker posts" in user_message:
+        posts = JobSeekerPost.objects.all().order_by('-created_at')[:5]
+        if posts:
+            post_list = ', '.join([post.title for post in posts])
+            return f"Here are some of the latest job seeker posts: {post_list}. For more details, please visit our job board."
+        return "There are currently no job seeker posts available."
+
+    if "job seeker post details" in user_message:
+        post_title = user_message.replace("job seeker post details", "").strip()
+        post = JobSeekerPost.objects.filter(title__icontains=post_title).first()
+        if post:
+            return (f"Post Title: {post.title}\nDescription: {post.description}\nSkills: {post.skills}\n"
+                    f"Experience Level: {post.experience_level}\nPreferred Location: {post.preferred_location}\n"
+                    f"Employment Type: {post.employment_type}\nIndustry: {post.industry}\n"
+                    f"Created By: {post.created_by.username}\nCreated At: {post.created_at.strftime('%Y-%m-%d')}")
+        return "Sorry, I couldn't find any job seeker post details matching that description."
+
+    # ** User Profiles **
+    if "user profile" in user_message:
+        username = user_message.replace("user profile", "").strip()
+        user = User.objects.filter(username__icontains=username).first()
+        if user:
+            profile = UserProfile.objects.filter(user=user).first()
+            if profile:
+                return (f"Username: {user.username}\nCity: {profile.city}\nEducation: {profile.education}\n"
+                        f"Experience: {profile.experience}\nSkills: {profile.skills}\nCertifications: {profile.certifications}\n"
+                        f"Languages: {profile.languages}\nInterests: {profile.interests}")
+            return "User profile found, but no additional details available."
+        return "Sorry, I couldn't find any user profile matching that username."
+
+    if "update profile" in user_message:
+        return ("To update your profile, log in and go to the 'Profile' section. You can edit your personal information, resume, and other details.")
+
+    if "create an account" in user_message or "register" in user_message:
+        return ("To create an account, click on 'Sign Up' and provide the required information. You will then be able to post jobs, apply for jobs, and manage your profile.")
+
+    if "delete an account" in user_message or "remove account" in user_message:
+        return ("If you want to delete your account, please contact our support team at supportJobsOnline@example.com, and we will assist you with the process.")
+
+    if "contact support" in user_message or "help" in user_message:
+        return ("If you need assistance, you can contact our support team at supportJobsOnline@example.com. We're here to help!")
+
+    if "privacy policy" in user_message or "terms of service" in user_message:
+        return ("You can review our privacy policy and terms of service on our website under the 'Legal' section.")
+
+    if "feedback" in user_message or "suggestions" in user_message:
+        return ("We value your feedback! Please send your suggestions or comments to feedbackJobsOnline@yahoo.com.")
+
+    return ("Sorry, I don't have information on that topic. Please visit our platform or contact our support team for more details.")
+
+logger = logging.getLogger(__name__)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChatbotView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            user_message = data.get('message')
+            if not user_message:
+                return JsonResponse({'error': 'No message provided.'}, status=400)
+
+            # Obține răspunsul botului
+            bot_response = get_bot_response(user_message)
+            
+            # Salvează conversația în baza de date
+            Message.objects.create(user_message=user_message, bot_response=bot_response)
+            
+            return JsonResponse({'response': bot_response})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+        
+     
+        

@@ -1,31 +1,30 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Chatbot from './Chatbot'; 
 
 function Home() {
-  const [username, setUsername] = useState(""); // Initial state for username
-  const navigate = useNavigate(); // Hook for navigation
+  const [username, setUsername] = useState(""); 
+  const navigate = useNavigate(); 
+  console.log("OpenAI API Key:", import.meta.env.OPENAI_API_KEY);
+
 
   useEffect(() => {
-    // Fetch username from localStorage when component mounts
     const storedUsername = localStorage.getItem("username");
-    console.log("Stored Username:", storedUsername); // Debug line
+    console.log("Stored Username:", storedUsername); 
     if (storedUsername) {
       setUsername(storedUsername);
     }
   }, []);
 
   const handleProfileClick = () => {
-    // Redirect user to their profile page
     navigate(`/profile/${username}`);
   };
 
   const handleJobPostsClick = () => {
-    // Redirect user to the job posts page
     navigate("/job-posts");
   };
 
   const handleJobSeekerPostsClick = () => {
-    // Redirect user to the job seeker posts page
     navigate("/job-seeker-posts");
   };
 
@@ -34,17 +33,14 @@ function Home() {
       {/* Navbar */}
       <nav style={navbarStyle}>
         <div style={navbarContentStyle}>
-          {/* Display username or "Guest" if no username is found */}
           <span style={usernameStyle} onClick={handleProfileClick}>
             {username || "Guest"}
           </span>
-          {/* Link to Job Posts page */}
           <span style={navLinkStyle} onClick={handleJobPostsClick}>
             Joburi
           </span>
-          {/* Link to Job Seeker Posts page */}
           <span style={navLinkStyle} onClick={handleJobSeekerPostsClick}>
-          job listings
+            job listings
           </span>
         </div>
       </nav>
@@ -52,13 +48,13 @@ function Home() {
       {/* Home page content */}
       <div>
         <h1>Welcome to the Home Page!</h1>
-        {/* Add additional content here */}
+        {/* Include the Chatbot component */}
+        <Chatbot />
       </div>
     </div>
   );
 }
 
-// Simple styling for the navbar
 const navbarStyle = {
   display: "flex",
   justifyContent: "space-between",
