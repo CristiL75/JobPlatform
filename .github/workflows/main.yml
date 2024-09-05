@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on:
   push:
@@ -44,15 +44,3 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: lambda-layer
-          path: backend/layer.zip
-
-      - name: Deploy Lambda Layer
-        run: |
-          aws lambda publish-layer-version \
-            --layer-name my-lambda-layer \
-            --zip-file fileb://backend/layer.zip \
-            --region ${{ secrets.AWS_REGION }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
