@@ -5,7 +5,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
-from .models import JobPost, Message
+from api.models import JobPost, Message
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
