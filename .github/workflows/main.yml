@@ -32,5 +32,6 @@ jobs:
 
       - name: Run Django tests
         run: |
+          export PYTHONPATH=$(pwd)/backend
           cd backend
           pytest --maxfail=1 --disable-warnings -q
