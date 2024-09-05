@@ -24,14 +24,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r backend/requirements.txt
+          pip install pytest-django  # Ensure pytest-django is installed
 
       - name: Set up environment variables
         run: |
           echo "DJANGO_SETTINGS_MODULE=backend.settings" >> $GITHUB_ENV
-          echo "PYTHONPATH=$(pwd)/backend" >> $GITHUB_ENV
 
       - name: Run Django tests
         run: |
-          export PYTHONPATH=$(pwd)/backend
           cd backend
           pytest --maxfail=1 --disable-warnings -q
