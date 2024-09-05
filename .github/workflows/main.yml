@@ -33,7 +33,7 @@ jobs:
         run: |
           export PYTHONPATH=$(pwd)/backend
           cd backend
-          pytest tests
+          pytest --maxfail=1 --disable-warnings -q
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
