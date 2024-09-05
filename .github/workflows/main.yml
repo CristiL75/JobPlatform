@@ -28,18 +28,12 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "DJANGO_SETTINGS_MODULE=backend.backend.settings" >> $GITHUB_ENV
-
-      - name: Debugging
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "PYTHONPATH: $PYTHONPATH"
-          python -c "import sys; print(sys.path)"
+          export PYTHONPATH=$(pwd)/backend
 
       - name: Run Django tests
         run: |
-          export PYTHONPATH=$(pwd)/backend
           cd backend
-          pytest --maxfail=1 --disable-warnings -q
+          pytest tests
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
