@@ -1,6 +1,9 @@
 import os
+import django
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.JobPlatform.settings')
 django.setup()
+
 
 from django.urls import reverse
 from rest_framework import status
