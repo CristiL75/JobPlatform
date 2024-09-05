@@ -45,3 +45,7 @@ jobs:
         run: |
           cd frontend
           npm run build
+
+env:
+  DJANGO_SETTINGS_MODULE: JobPlatform.settings
+
