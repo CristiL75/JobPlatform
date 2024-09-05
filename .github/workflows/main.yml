@@ -16,27 +16,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Python environment for Django
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.9'
 
-      - name: Install dependencies for Django
-        run: |
-          pip install -r backend/requirements.txt
-
-      - name: Run Django tests
-        run: |
-          pytest backend/tests
-
-      # Set up Node.js environment for React
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies for React
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Set PYTHONPATH and Run Django tests
+        env:
+          DJANGO_SETTINGS_MODULE: backend.settings
+        run: |
+          export PYTHONPATH=$(pwd)/backend
+          cd backend
+          pytest tests
+
+      - name: Install Node.js dependencies
         run: |
           cd frontend
           npm install
@@ -45,8 +48,3 @@ jobs:
         run: |
           cd frontend
           npm run build
-
-env:
-  DJANGO_SETTINGS_MODULE: backend.backend.settings
-  
-
