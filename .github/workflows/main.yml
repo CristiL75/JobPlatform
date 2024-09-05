@@ -39,6 +39,7 @@ jobs:
           cd backend
           pytest tests
 
+
       - name: Install Node.js dependencies
         run: |
           cd frontend
