@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Deploy to AWS Lambda
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,22 +37,6 @@ jobs:
             -r requirements.txt
           zip -r layer.zip python
 
-      - name: Upload Lambda Layer
-        uses: actions/upload-artifact@v3
-        with:
-          name: lambda-layer
-          path: backend/layer.zip
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download Lambda Layer
-        uses: actions/download-artifact@v3
-        with:
-          name: lambda-layer
-
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
@@ -60,6 +44,6 @@ jobs:
             --zip-file fileb://backend/layer.zip \
             --publish
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AKIAQE43KHJGLLUWGNUY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.hPPb1SbTkQcXnLeC00x/XLNn5r3lqcTVCMTUNim9 }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
