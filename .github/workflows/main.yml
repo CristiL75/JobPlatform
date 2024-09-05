@@ -25,14 +25,6 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
 
-      - name: Remove numpy if present
-        run: |
-          pip uninstall -y numpy || true
-
-      - name: Clean up cache
-        run: |
-          pip cache purge
-
       - name: Run Django tests
         run: |
           cd backend
