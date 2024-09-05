@@ -47,5 +47,5 @@ jobs:
           npm run build
 
 env:
-  DJANGO_SETTINGS_MODULE: backend.settings
+  DJANGO_SETTINGS_MODULE: backend.JobPlatform.settings
 
