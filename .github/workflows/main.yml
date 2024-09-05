@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8'
+          python-version: '3.9'  # Ensure this matches your local and production environment
 
       - name: Install dependencies
         run: |
@@ -27,7 +27,7 @@ jobs:
 
       - name: Uninstall numpy if present
         run: |
-          pip uninstall -y numpy || true
+          pip uninstall -y numpy || true  # Uninstall numpy if it causes issues
 
       - name: Run Django tests
         run: |
