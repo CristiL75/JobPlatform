@@ -1,15 +1,17 @@
 import os
 import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.backend.settings')
-django.setup()
-
-
+import json
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from .models import JobPost, Message
+
+# Setează variabila de mediu DJANGO_SETTINGS_MODULE
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
+# Configurează Django
+django.setup()
 
 class UserCreateTest(APITestCase):
     def test_create_user(self):
