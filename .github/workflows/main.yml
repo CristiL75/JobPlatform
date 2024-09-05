@@ -23,10 +23,12 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd backend
           pip install -r requirements.txt
 
       - name: Create Lambda Layer
         run: |
+          cd backend
           mkdir -p python
           pip install \
             --platform manylinux2014_x86_64 \
@@ -42,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: lambda-layer
-          path: layer.zip
+          path: backend/layer.zip
