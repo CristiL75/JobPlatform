@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from .models import JobPost, Message
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 class UserCreateTest(APITestCase):
