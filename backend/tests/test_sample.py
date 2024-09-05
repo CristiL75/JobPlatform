@@ -7,15 +7,12 @@ from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth.models import User
 from .models import JobPost, Message
 
-# Setează variabila de mediu DJANGO_SETTINGS_MODULE
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-
-# Configurează Django
 django.setup()
 
 class UserCreateTest(APITestCase):
     def test_create_user(self):
-        url = reverse('user-create')  # Asigură-te că ai un URL definit pentru acest view
+        url = reverse('user-create')
         data = {
             'username': 'testuser',
             'password': 'password123',
@@ -26,13 +23,12 @@ class UserCreateTest(APITestCase):
 
 class JobPostListCreateViewTest(APITestCase):
     def setUp(self):
-        # Creează un utilizator și autentifică-l
         self.user = User.objects.create_user(username='testuser', password='password123')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_create_job_post(self):
-        url = reverse('jobpost-list-create')  # Definește URL-ul corect pentru view-ul tău
+        url = reverse('jobpost-list-create')
         data = {
             'title': 'Test Job',
             'description': 'This is a test job description',
@@ -55,13 +51,13 @@ class JobPostListCreateViewTest(APITestCase):
 
 class ChatbotViewTest(APITestCase):
     def test_chatbot_response(self):
-        url = reverse('chatbot-view')  # Asigură-te că URL-ul este corect
+        url = reverse('chatbot-view')
         data = {
             'message': 'hello'
         }
         response = self.client.post(url, data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('Hello!', response.data['response'])  # Verificăm dacă răspunsul chatbotului este corect
+        self.assertIn('Hello!', response.data['response'])
 
     def test_invalid_message(self):
         url = reverse('chatbot-view')
