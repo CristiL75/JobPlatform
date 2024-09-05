@@ -27,7 +27,7 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "DJANGO_SETTINGS_MODULE=backend.settings" >> $GITHUB_ENV
+          echo "DJANGO_SETTINGS_MODULE=backend.backend.settings" >> $GITHUB_ENV
 
       - name: Run Django tests
         run: |
