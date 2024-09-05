@@ -21,11 +21,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install dependencies for Django
+      - name: Install dependencies
         run: |
           pip install -r backend/requirements.txt
 
-      - name: Set up environment variables
+      - name: Set environment variables
         run: |
           echo "DJANGO_SETTINGS_MODULE=backend.settings" >> $GITHUB_ENV
           echo "PYTHONPATH=$(pwd)/backend" >> $GITHUB_ENV
