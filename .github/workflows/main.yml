@@ -29,6 +29,12 @@ jobs:
         run: |
           echo "DJANGO_SETTINGS_MODULE=backend.backend.settings" >> $GITHUB_ENV
 
+      - name: Debugging
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "PYTHONPATH: $PYTHONPATH"
+          python -c "import sys; print(sys.path)"
+
       - name: Run Django tests
         run: |
           export PYTHONPATH=$(pwd)/backend
