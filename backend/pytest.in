@@ -1,0 +1,9 @@
+[pytest]
+# Specifică modulul de setări Django pe care să-l folosească pytest
+DJANGO_SETTINGS_MODULE = backend.settings
+
+# Adaugă directorul proiectului la PYTHONPATH pentru a putea importa modulele
+python_paths = backend
+
+# (Opțional) Specifică orice alte opțiuni relevante pentru pytest aici
+# De exemplu, poți adăuga opțiuni pentru a controla comportamentul pytest
