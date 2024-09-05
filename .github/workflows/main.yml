@@ -25,6 +25,10 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
 
+      - name: Uninstall numpy if present
+        run: |
+          pip uninstall -y numpy || true
+
       - name: Run Django tests
         run: |
           cd backend
