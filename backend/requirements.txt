@@ -11,3 +11,5 @@ python-dotenv
 pytest==6.2.5
 pytest-django==4.4.0
 django-extensions
+numpy; platform_system == "Linux"
+
