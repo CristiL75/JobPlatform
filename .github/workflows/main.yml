@@ -44,3 +44,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: lambda-layer
+          path: backend/layer.zip
