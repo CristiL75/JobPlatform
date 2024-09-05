@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
@@ -28,10 +28,6 @@ jobs:
       - name: Uninstall numpy if present
         run: |
           pip uninstall -y numpy || true
-
-      - name: Verify numpy is uninstalled
-        run: |
-          pip list | grep numpy || true
 
       - name: Run Django tests
         run: |
