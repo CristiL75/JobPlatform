@@ -19,17 +19,27 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.9'  # Ensure this matches your local and production environment
+          python-version: '3.9'
 
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
+          pip install -r requirements.txt
 
-      - name: Uninstall numpy if present
+      - name: Create Lambda Layer
         run: |
-          pip uninstall -y numpy || true  # Uninstall numpy if it causes issues
+          mkdir -p python
+          pip install \
+            --platform manylinux2014_x86_64 \
+            --target=python \
+            --implementation cp \
+            --python-version 3.9 \
+            --only-binary=:all: \
+            --upgrade \
+            -r requirements.txt
+          zip -r layer.zip python
 
-      - name: Run Django tests
-        run: |
-          cd backend
-          pytest --maxfail=1 --disable-warnings -q
+      - name: Upload Lambda Layer
+        uses: actions/upload-artifact@v3
+        with:
+          name: lambda-layer
+          path: layer.zip
